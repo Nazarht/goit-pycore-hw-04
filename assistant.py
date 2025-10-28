@@ -9,38 +9,40 @@ def main():
         return command, args
 
     def handle_hello(_: list[str]) -> None:
-        print("How can I help you?")
+        return "How can I help you?"
 
-    def handle_add(args: list[str]) -> None:
+    def handle_add(args: list[str]) -> str:
         if len(args) < 2:
-            print("Please provide name and phone number")
-            return
+            return "Please provide name and phone number"
         contact_name = args[0]
         contact_phone_number = args[1]
         contacts[contact_name] = contact_phone_number
-        print(f"Contact {contact_name} added successfully")
+        return f"Contact {contact_name} added successfully"
 
-    def handle_change(args: list[str]) -> None:
+    def handle_change(args: list[str]) -> str:
         if len(args) < 2:
-            print("Please provide name and new phone number")
-            return
+            return "Please provide name and new phone number"
         contact_name = args[0]
         contact_phone_number = args[1]
         contacts[contact_name] = contact_phone_number
-        print(f"Contact {contact_name} updated successfully")
+        return f"Contact {contact_name} updated successfully"
 
-    def handle_phone(args: list[str]) -> None:
+    def handle_phone(args: list[str]) -> str:
         if len(args) < 1:
-            print("Please provide a contact name")
-            return
+            return "Please provide a contact name"
         contact_name = args[0]
-        print(
-            f"Contact {contact_name} phone number is {contacts.get(contact_name)}"
-        )
+        return f"Contact {contact_name} phone number is {contacts.get(contact_name)}"
 
-    def handle_all(_: list[str]) -> None:
+    def handle_all(_: list[str]) -> str:
+        result: list[str] = []
+        
         for contact_name, contact_phone_number in contacts.items():
-            print(f"{contact_name} - {contact_phone_number}")
+            result.append(f"{contact_name} - {contact_phone_number}")
+        
+        if not result:
+            return "No contacts found"
+        
+        return "\n".join(result)
 
     handlers: dict[str, callable] = {
         "hello": handle_hello,
@@ -72,7 +74,8 @@ def main():
             print("Invalid command")
             continue
 
-        handler(args)
+        result = handler(args)
+        print(result)
 
 if __name__ == "__main__":
     main()
